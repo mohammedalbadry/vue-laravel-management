@@ -32,8 +32,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                     <tr v-for="item in allItem.data" :key="item.id">
-                        <td>1</td>
+                     <tr v-for="(item, index) in allItem.data" :key="item.id">
+                        <td>{{index + 1}}</td>
                         <td>{{item.name}}</td>
                         <td>
                             <button @click="passActionItem(item)" type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#show_modal">
@@ -106,7 +106,7 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">edit item</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">edit category</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -134,7 +134,7 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">delete item</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">delete category</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>

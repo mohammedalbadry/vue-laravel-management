@@ -35,7 +35,7 @@ class EmployeeControoler extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'required|min:2',
             'email' => ['required', 'email', 'unique:users'],
             'password' => 'required|confirmed|min:6',
             'password_confirmation' =>'required',
@@ -125,7 +125,7 @@ class EmployeeControoler extends Controller
         User::find($id)->update($data);
         return response()->json([
             'status' => 'success',
-            'message' => "added successfuly"
+            'message' => "updated successfuly"
         ]);
 
     }

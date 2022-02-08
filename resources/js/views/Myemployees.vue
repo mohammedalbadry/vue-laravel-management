@@ -34,8 +34,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                     <tr v-for="item in allItem.data" :key="item.id">
-                        <td>1</td>
+                     <tr v-for="(item, index) in allItem.data" :key="item.id">
+                        <td>{{index + 1}}</td>
                         <td>{{item.name}}</td>
                         <td>{{item.email}}</td>
                         <td>{{item.job_title}}</td>
@@ -64,7 +64,7 @@
                 <div class="modal-dialog  modal-lg modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">add new category</h5>
+                            <h5 class="modal-title" id="exampleModalLongTitle">add new employee</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -91,7 +91,7 @@
                                 <input
                                  :class='[ newDataErrors.password ? "is-invalid" : ""]'
                                  v-model="newData.password"
-                                 type="text" class="form-control" placeholder="password ...">
+                                 type="password" class="form-control" placeholder="password ...">
                                 <div class="invalid-feedback" v-if="newDataErrors.password">{{ newDataErrors.password[0] }}</div>
                             </div>
                             <div class="mb-3">
@@ -99,7 +99,7 @@
                                 <input
                                  :class='[ newDataErrors.password_confirmation ? "is-invalid" : ""]'
                                  v-model="newData.password_confirmation"
-                                 type="text" class="form-control" placeholder="password ...">
+                                 type="password" class="form-control" placeholder="password ...">
                                 <div class="invalid-feedback" v-if="newDataErrors.password_confirmation">{{ newDataErrors.password_confirmation[0] }}</div>
                             </div>
                             <div class="mb-3">
@@ -176,7 +176,7 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">edit item</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">edit employee</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -203,7 +203,7 @@
                             <input
                               :class='[ editDataErrors.password ? "is-invalid" : ""]'
                               v-model="actionItem.password"
-                              type="text" class="form-control" placeholder="password ...">
+                              type="password" class="form-control" placeholder="password ...">
                             <div class="invalid-feedback" v-if="editDataErrors.password">{{ editDataErrors.password[0] }}</div>
                         </div>
                         <div class="mb-3">
@@ -211,7 +211,7 @@
                             <input
                               :class='[ editDataErrors.password_confirmation ? "is-invalid" : ""]'
                               v-model="actionItem.password_confirmation"
-                              type="text" class="form-control" placeholder="password ...">
+                              type="password" class="form-control" placeholder="password ...">
                             <div class="invalid-feedback" v-if="editDataErrors.password_confirmation">{{ editDataErrors.password_confirmation[0] }}</div>
                         </div>
                         <div class="mb-3">
@@ -265,7 +265,7 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">delete item</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">delete employee</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -376,8 +376,6 @@ export default {
             .then(response=> {
                 if(response.data.status == "error"){
                     this.newDataErrors = response.data.errors
-                                      console.log("e")
-
                 } else if(response.data.status == "success") {
                   console.log("s")
                     this.read()
@@ -386,7 +384,14 @@ export default {
                         title: response.data.message
                     })
                     this.newDataErrors = {}
-                    this.newData = {}
+                    this.newData = {
+                            name: "",
+                            email: "",
+                            password: "",
+                            password_confirmation: "",
+                            img: "",
+                            job_title: "employee"
+                    }
                     this.add_preview_img = "http://127.0.0.1:8000/uploads/employees/default.png"
                     document.querySelectorAll('[data-dismiss="modal"]').forEach(element => element.click())
                 }
@@ -428,6 +433,16 @@ export default {
                         icon: 'success',
                         title: response.data.message
                     })
+                    this.actionItem = {
+                        id: null,
+                        name: "",
+                        email: "",
+                        password: "",
+                        password_confirmation: "",
+                        img: "",
+                        img_path: "",
+                        job_title: ""
+                    },
                     this.editDataErrors = {}
                     document.querySelectorAll('[data-dismiss="modal"]').forEach(element => element.click())
 

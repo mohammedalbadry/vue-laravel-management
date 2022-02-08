@@ -2,7 +2,7 @@
 <div class="login-page">
     <div class="login-box">
         <div class="login-logo">
-            <a href="../../index2.html"><b>Admin</b>LTE</a>
+            <router-link to="/">{{this.$store.state.setting.name}}</router-link>
         </div>
         <!-- /.login-logo -->
         <div class="card">
@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 export default {
     data(){
         return {
@@ -65,11 +64,6 @@ export default {
             })
         }
     },
-    created(){
-      /*  if(this.$store.getters.isLogged !== false){
-            this.$router.push('category') 
-        }*/
-    }
 }
 </script>
 

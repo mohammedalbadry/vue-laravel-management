@@ -22,7 +22,7 @@
             <input
               :class='[ editDataErrors.password ? "is-invalid" : ""]'
               v-model="theItem.password"
-              type="text" class="form-control" placeholder="password ...">
+              type="password" class="form-control" placeholder="password ...">
             <div class="invalid-feedback" v-if="editDataErrors.password">{{ editDataErrors.password[0] }}</div>
         </div>
         <div class="mb-3">
@@ -30,7 +30,7 @@
             <input
               :class='[ editDataErrors.password_confirmation ? "is-invalid" : ""]'
               v-model="theItem.password_confirmation"
-              type="text" class="form-control" placeholder="password ...">
+              type="password" class="form-control" placeholder="password ...">
             <div class="invalid-feedback" v-if="editDataErrors.password_confirmation">{{ editDataErrors.password_confirmation[0] }}</div>
         </div>
         <div class="mb-3">
@@ -70,6 +70,7 @@
             </div>
           </div>
         </div>  
+        <button type="button" class="btn btn-primary" @click="update()">save change</button>
     </div>
   </div>
 </template>
@@ -108,17 +109,17 @@ export default {
             var fd = new FormData()
             fd.append("_method", "put");
 
-            fd.append('name', this.actionItem.name)
-            fd.append('email', this.actionItem.email)
-            fd.append('password', this.actionItem.password)
-            fd.append('password_confirmation', this.actionItem.password_confirmation)
-            if(typeof(this.actionItem.img) == "object"){
-              fd.append('img', this.actionItem.img)
+            fd.append('name', this.theItem.name)
+            fd.append('email', this.theItem.email)
+            fd.append('password', this.theItem.password)
+            fd.append('password_confirmation', this.theItem.password_confirmation)
+            if(typeof(this.theItem.img) == "object"){
+              fd.append('img', this.theItem.img)
             }
-            fd.append('job_title', this.actionItem.job_title)
+            fd.append('job_title', this.theItem.job_title)
 
             axios({
-                    url: '/Employee/' + this.actionItem.id,
+                    url: '/Employee/' + this.theItem.id,
                     method: 'post',
                     baseURL: 'http://127.0.0.1:8000/api/',
                     data: fd,
@@ -134,6 +135,8 @@ export default {
                         title: response.data.message
                     })
                     this.editDataErrors = {}
+
+                    this.$store.commit('setAuther', this.theItem)
                     document.querySelectorAll('[data-dismiss="modal"]').forEach(element => element.click())
 
                 }

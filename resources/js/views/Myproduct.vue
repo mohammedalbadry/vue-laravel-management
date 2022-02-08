@@ -35,8 +35,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                     <tr v-for="item in allItem.data" :key="item.id">
-                        <td>1</td>
+                     <tr v-for="(item, index) in allItem.data" :key="item.id">
+                        <td>{{index + 1}}</td>
                         <td>{{item.name}}</td>
                         <th>{{item.price}}</th>
                         <th>{{item.stock}}</th>
@@ -65,7 +65,7 @@
                 <div class="modal-dialog  modal-lg modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">add new category</h5>
+                            <h5 class="modal-title" id="exampleModalLongTitle">add new product</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -158,7 +158,7 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">show category</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">show product</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -185,7 +185,7 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">edit item</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">edit product</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -246,10 +246,10 @@
                         <div class="mb-3">
                             <label class="form-label">stock</label>
                             <input
-                                :class='[ newDataErrors.stock ? "is-invalid" : ""]'
+                                :class='[ editDataErrors.stock ? "is-invalid" : ""]'
                                 v-model="actionItem.stock"
                                 type="number" class="form-control" placeholder="stock ...">
-                            <div class="invalid-feedback" v-if="newDataErrors.stock">{{ newDataErrors.stock[0] }}</div>
+                            <div class="invalid-feedback" v-if="editDataErrors.stock">{{ editDataErrors.stock[0] }}</div>
                         </div>
 
                         <div class="mb-3">
@@ -279,7 +279,7 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">delete item</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">delete product</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>

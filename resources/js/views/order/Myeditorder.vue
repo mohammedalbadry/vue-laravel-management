@@ -88,11 +88,8 @@
                         <div class="col-12">
                             <button @click="updateOrder()" class="btn btn-block btn-success mb-3">save change</button>
                         </div>
-                        <div class="col-6">
-                            <button class="btn btn-block btn-primary">print</button>
-                        </div>
-                        <div class="col-6">
-                            <button @click="clear()" class="btn btn-block btn-warning">clear</button>
+                        <div class="col-12">
+                            <router-link to="/admin/orders" class="btn btn-block btn-primary">back to orders</router-link>
                         </div>
                     </div>
                 </div>
@@ -171,6 +168,7 @@ export default {
             total: 0,
             discount: null,
             discountError: null,
+            status: null,
             note: null,
 
         }
@@ -218,6 +216,7 @@ export default {
                 this.total = response.data.data.total
                 this.discount = response.data.data.discount
                 this.note = response.data.data.note
+                this.status = response.data.data.status
 
             })
             .catch( error => {
@@ -332,6 +331,7 @@ export default {
             fd.append('total', this.total)
             fd.append('discount', this.discount)
             fd.append('note', this.note)
+            fd.append('status', this.status)
 
             fd.append('order_items[]', JSON.stringify(this.invoiceItems))
 

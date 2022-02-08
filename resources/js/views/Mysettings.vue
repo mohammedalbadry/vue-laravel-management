@@ -176,6 +176,11 @@ export default {
                         title: response.data.message
                     })
                     this.errors = {}
+
+                    this.$store.commit('setSetting', this.settings)
+                    document.title = this.settings.name
+                    var link = document.getElementById('site_icon')
+                    link.href = this.settings.icon_path
                 }
                
             })

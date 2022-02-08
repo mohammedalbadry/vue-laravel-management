@@ -127,7 +127,7 @@ class ProductController extends Controller
         Product::find($id)->update($data);
         return response()->json([
             'status' => 'success',
-            'message' => "added successfuly"
+            'message' => "updated successfuly"
         ]);
     }
 

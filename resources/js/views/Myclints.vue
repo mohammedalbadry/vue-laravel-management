@@ -33,8 +33,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                     <tr v-for="item in allItem.data" :key="item.id">
-                        <td>1</td>
+                     <tr v-for="(item, index) in allItem.data" :key="item.id">
+                        <td>{{index + 1}}</td>
                         <td>{{item.name}}</td>
                         <td>{{item.address}} <br /> {{item.phone}}</td>
                         <td>
@@ -61,7 +61,7 @@
                 <div class="modal-dialog  modal-lg modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">add new category</h5>
+                            <h5 class="modal-title" id="exampleModalLongTitle">add new clint</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -134,7 +134,7 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">edit item</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">edit clint</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -182,7 +182,7 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">delete item</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">delete clint</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -254,9 +254,15 @@ export default {
         create:function(){
             
             var fd = new FormData()
-            fd.append('name', this.newData.name)
-            fd.append('address', this.newData.address)
-            fd.append('phone', this.newData.phone)
+            if(this.newData.name != null){
+                fd.append('name', this.newData.name)
+            }
+            if(this.newData.address != null){
+                fd.append('address', this.newData.address)
+            }
+            if(this.newData.phone != null){
+                fd.append('phone', this.newData.phone)
+            }
 
             axios({
                     url: '/clint',
@@ -287,9 +293,15 @@ export default {
         update:function(){
 
             var fd = new FormData()
-            fd.append('name', this.actionItem.name)
-            fd.append('address', this.actionItem.address)
-            fd.append('phone', this.actionItem.phone)
+            if(this.actionItem.name != null){
+                fd.append('name', this.actionItem.name)
+            }
+            if(this.actionItem.address != null){
+                fd.append('address', this.actionItem.address)
+            }
+            if(this.actionItem.phone != null){
+                fd.append('phone', this.actionItem.phone)
+            }
             fd.append("_method", "put");
 
             axios({

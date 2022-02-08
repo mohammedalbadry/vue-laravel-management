@@ -6,9 +6,10 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
-        auther:{},
+		setting: null,
+        auther: null,
 		token: null,
-		authError: null
+		authError: null,
 	},
 	mutations: {
 		setAuther(state, payload){
@@ -23,6 +24,9 @@ const store = new Vuex.Store({
 		setError(state, payload){
 			state.authError = payload
 		},
+		setSetting(state, payload){
+			state.setting = payload
+		}
 	},
 	actions: {
 		loginAction (context, payload) {
@@ -50,6 +54,7 @@ const store = new Vuex.Store({
             });
 		},
 		attempAction(context, token){
+
 			axios({
 				url: 'http://127.0.0.1:8000/api/auth/me/',
 				method: 'post',
@@ -59,7 +64,8 @@ const store = new Vuex.Store({
 				context.commit('setError', null)
 				context.commit('setToken', token)
 				context.commit('setAuther', res.data)
-				if(router.history.current.path == "/login"){
+
+				if(router.history.current.path == "/admin/login"){
 					axios.defaults.headers.common['authorization'] = "Bearer " + token
 					router.push('home').catch(() => { /* ignore */ })
 				} else {
@@ -76,18 +82,35 @@ const store = new Vuex.Store({
 
 				
 		
-		}
-	},
-	getters : {
-		isLogged: function(state) {
-			if(state.token == null){
-				return false
-			} else{
-				return true
-			}
+		},
+		logoutAction(context) {
+
+			axios({
+				url: '/auth/logout/',
+				method: 'post',
+				baseURL: 'http://127.0.0.1:8000/api/',
+				})
+				.then(response=> {
+
+					context.commit('setError', null)
+					context.commit('setToken', null)
+					context.commit('setAuther', null)
+					localStorage.removeItem("token")
+					localStorage.removeItem("auther")
+					router.push('/admin/login').catch(() => { /* ignore */ })
+
+
+				})
+				.catch( error => {
+					//console.log(error)
+				});
+			
+
+		},
+		settingAction(context, settings){
+			context.commit('setSetting', settings)
 		}
 	}
-
 
 })
 

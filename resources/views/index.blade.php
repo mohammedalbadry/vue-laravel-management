@@ -13,7 +13,6 @@
         <link rel="stylesheet" href="{{asset('assets/dist/css/adminlte.min.css')}}">
     </head>
     <body class="hold-transition sidebar-mini">
-
         <div class="wrapper">
             <div id="app">
                 <router-view></router-view>

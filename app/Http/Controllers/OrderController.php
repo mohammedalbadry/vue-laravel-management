@@ -18,8 +18,8 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $data = Order::when($request->search, function($query) use ($request){
-            return $query->where('name', 'like', '%' . $request->search . '%');
-        })->with('clint', 'items')->orderBy('id', 'DESC')->paginate(5);
+            return $query->where('status', 'like', '%' . $request->search . '%');
+        })->with('clint', 'items')->orderBy('id', 'DESC')->paginate(10);
 
         return response()->json([
             'status' => 'success',
@@ -116,6 +116,8 @@ class OrderController extends Controller
             'note' => 'nullable',
             'order_items' => 'required|array',
 
+            'status' => "required",
+
             "order_items.*.*.id"  => "required",
             "order_items.*.*.quantity"  => "required|integer",
             "order_items.*.*.name"  => "required",
@@ -133,6 +135,7 @@ class OrderController extends Controller
 
         $order = Order::find($id)->update([
             'total' => $request->total,
+            'status' => $request->status,
             'discount' => $request->discount == "null" ?  null: $request->discount,
             'note' => $request->note == "null" ?  null: $request->note,
         ]);

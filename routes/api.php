@@ -14,26 +14,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 Route::group([
 
     'middleware' => 'api',
     'prefix' => 'auth'
 
 ], function ($router) {
-
     Route::post('login', 'AuthController@login');
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
-
 });
 
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-//Route::apiResource('category', CategoryController::class);    
+Route::get('setting',"SettingController@index");
+Route::get('getorder/{id}', 'EndUserController@index');
 
 
 Route::group(['middleware' => 'auth:api'], function(){
@@ -43,8 +38,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::apiResource('category', CategoryController::class);
     Route::apiResource('order', OrderController::class); 
 
-    
-    Route::get('setting',"SettingController@index");
+    Route::post('home',"HomeController@index");
     Route::post('setting',"SettingController@update");
     Route::get('categories',"APIController@category_with_products");
     Route::post('clintsearch',"APIController@clint_search");

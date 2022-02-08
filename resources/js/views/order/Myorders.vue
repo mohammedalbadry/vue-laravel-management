@@ -14,7 +14,7 @@
                     </form>
                 </div>
                 <div class="col-md-7">
-                    <router-link to="/new_order" target="_blank" class="btn btn-primary">
+                    <router-link to="/admin/new_order" target="_blank" class="btn btn-primary">
                         add
                     </router-link>
                 </div>
@@ -28,22 +28,27 @@
                 <tr>
                     <th style="width: 10px">#</th>
                     <th>total</th>
+                    <th>status</th>
                     <th>clint name</th>
                     <th>actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                     <tr v-for="item in allItem.data" :key="item.id">
-                        <td>1</td>
+                     <tr v-for="(item, index) in allItem.data" :key="item.id">
+                        <td>{{index}}</td>
                         <td>{{item.total}}</td>
+                        <td>
+                            <button class='btn btn-sm btn-status' :class="item.status">{{item.status}}</button>
+                        </td>
                         <td>{{item.clint.name}}</td>
                         <td>
                             <button @click="passActionItem(item)" type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#show_modal">
-                             show <i class="fas fa-eye"></i>
+                                    show <i class="fas fa-eye"></i>
                             </button>
-                            <router-link :to="'/edit_order/' + item.id" target="_blank" class="btn btn-primary btn-sm">
+                            
+                            <button @click="passActionItem(item)" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#edit_modal">
                                 edit <i class="fa fa-edit"></i>
-                            </router-link>
+                            </button>
                             <button @click="passActionItem(item)" type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete_modal">
                                 delete <i class="fa fa-trash-alt"></i>
                             </button>
@@ -120,25 +125,64 @@
                     </div>
                 </div>
             </div>
+            <!-- edit Modal -->
+            <div class="modal fade" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">edit item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="mb-3">
+                            <label class="form-label">status</label>
+                            <select 
+                                :class='[ editDataErrors.status ? "is-invalid" : ""]'
+                                v-model="actionItem.status"
+                                class="custom-select form-select form-select-lg" aria-label=".form-select-lg example">
+                                <option value="pending">pending</option>     
+                                <option value="complete">complete</option>
+                                <option value="processing">processing</option>
+                                <option value="shipping">shipping</option>
+                                <option value="refound">refound</option>
+                                <option value="canceled">canceled</option>
+                            </select>   
+                            <div class="invalid-feedback" v-if="editDataErrors.status">{{ editDataErrors.status[0] }}</div>
+                        </div>
+                                
+                        <router-link :to="'/admin/edit_order/' + actionItem.id" target="_blank" class="btn btn-primary btn-block">
+                            Edit details <i class="fa fa-edit"></i>
+                        </router-link>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button @click="update()" type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
             <!-- delete Modal -->
             <div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">delete item</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Confirm deletion of <strong>{{actionItem.name}}</strong></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button @click="destroy()" type="button" class="btn btn-danger">Confirm</button>
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">delete item</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Confirm deletion of <strong>{{actionItem.name}}</strong></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button @click="destroy()" type="button" class="btn btn-danger">Confirm</button>
+                        </div>
                     </div>
                 </div>
-            </div>
             </div>
         </div>
 
@@ -184,51 +228,26 @@ export default {
 
 
         },
-        create:function(){
-            
-            var fd = new FormData()
-            fd.append('name', this.newData.name)
-
-            axios({
-                    url: '/category',
-                    method: 'post',
-                    baseURL: 'http://127.0.0.1:8000/api/',
-                    data: fd,
-            })
-            .then(response=> {
-                if(response.data.status == "error"){
-                    this.newDataErrors = response.data.errors
-                } else if(response.data.status == "success") {
-                    this.read()
-                    Toast.fire({
-                        icon: 'success',
-                        title: response.data.message
-                    })
-                    this.newDataErrors = {}
-                    document.querySelectorAll('[data-dismiss="modal"]').forEach(element => element.click())
-                }
-               
-            })
-            .catch( error => {
-               //console.log(error)
-            });
-
-
-        },
         update:function(){
 
             var fd = new FormData()
-            fd.append('name', this.actionItem.name)
             fd.append("_method", "put");
+            fd.append("status", this.actionItem.status);
+            fd.append('total', this.actionItem.total)
+            fd.append('discount', this.actionItem.discount)
+            fd.append('note', this.actionItem.note)
+            fd.append('order_items[]', JSON.stringify(this.actionItem.items))
 
             axios({
-                    url: '/category/' + this.actionItem.id,
+                    url: '/order/' + this.actionItem.id,
                     method: 'post',
                     baseURL: 'http://127.0.0.1:8000/api/',
                     data: fd,
 
             })
             .then(response=> {
+                                    console.log(response)
+
                 if(response.data.status == "error"){
                     this.editDataErrors = response.data.errors
                 } else if(response.data.status == "success") {
@@ -291,6 +310,12 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.btn-status{color: #fff}
+.btn-status.shipping{background-color: #0275d8}
+.btn-status.processing{background-color: #5bc0de}
+.btn-status.complete{background-color: #5cb85c}
+.btn-status.pending{background-color: #f0ad4e}
+.btn-status.refound{background-color: #d9534f}
+.btn-status.canceled{background-color: #292b2c}
 </style>

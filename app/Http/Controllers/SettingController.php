@@ -13,22 +13,31 @@ class SettingController extends Controller
 
     public function index()
     {
+
+        $data = Settings::first();
         return response()->json([
             'status' => 'success',
-            'data' => Settings::first(),
+            'data' => $data,
         ]);
     }
 
     public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'required|string|min:2',
             'logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'icon' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'description' => 'required',
-            'status' => 'required',
-            'alt_text' => 'required',
+            'description' => 'required|string|min:10',
+            'status' => 'required|string|min:2',
+            'alt_text' => 'required|string|min:10',
         ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ]);
+        }
 
         $data = [
             'name' => $request->name,
@@ -41,7 +50,7 @@ class SettingController extends Controller
 
         if ($files = $request->file('logo')) {  
             if($model->logo != "default.png") {      
-                Storage::disk('public_uploads')->delete($this->img_path . $model->logo);
+                Storage::disk('public_uploads')->delete(public_path() . "/uploads/settings//" . $model->logo);
             }
 
             $ImageUpload = Image::make($files);
@@ -52,7 +61,7 @@ class SettingController extends Controller
         }
         if ($files = $request->file('icon')) {  
             if($model->icon != "default.png") {      
-                Storage::disk('public_uploads')->delete($this->img_path . $model->icon);
+                Storage::disk('public_uploads')->delete(public_path() . "/uploads/settings//" . $model->icon);
             }
 
             $ImageUpload = Image::make($files);
