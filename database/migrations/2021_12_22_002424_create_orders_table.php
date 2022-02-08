@@ -24,10 +24,12 @@ class CreateOrdersTable extends Migration
             $table->string('code')->nullable();
 
             $table->unsignedBigInteger('employee_id');
-            $table->foreign('employee_id')->references('id')->on('users');
+            $table->foreign('employee_id')->references('id')->on('users')
+                  ->onDelete('cascade');
 
             $table->unsignedBigInteger('clint_id');
-            $table->foreign('clint_id')->references('id')->on('clints');
+            $table->foreign('clint_id')->references('id')->on('clints')
+                  ->onDelete('cascade');
 
             $table->timestamps();
         });
