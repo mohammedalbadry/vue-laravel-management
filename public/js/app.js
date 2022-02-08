@@ -3595,8 +3595,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       fd.append("_method", "put");
       fd.append('name', this.actionItem.name);
       fd.append('email', this.actionItem.email);
-      fd.append('password', this.actionItem.password);
-      fd.append('password_confirmation', this.actionItem.password_confirmation);
+
+      if (this.actionItem.password && this.actionItem.password_confirmation) {
+        fd.append('password', this.actionItem.password);
+        fd.append('password_confirmation', this.actionItem.password_confirmation);
+      }
 
       if (_typeof(this.actionItem.img) == "object") {
         fd.append('img', this.actionItem.img);
@@ -4459,8 +4462,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       fd.append("_method", "put");
       fd.append('name', this.theItem.name);
       fd.append('email', this.theItem.email);
-      fd.append('password', this.theItem.password);
-      fd.append('password_confirmation', this.theItem.password_confirmation);
+
+      if (this.theItem.password && this.theItem.password_confirmation) {
+        fd.append('password', this.theItem.password);
+        fd.append('password_confirmation', this.theItem.password_confirmation);
+      }
 
       if (_typeof(this.theItem.img) == "object") {
         fd.append('img', this.theItem.img);

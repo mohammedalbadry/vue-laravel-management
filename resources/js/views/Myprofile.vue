@@ -111,8 +111,12 @@ export default {
 
             fd.append('name', this.theItem.name)
             fd.append('email', this.theItem.email)
-            fd.append('password', this.theItem.password)
-            fd.append('password_confirmation', this.theItem.password_confirmation)
+
+            if(this.theItem.password && this.theItem.password_confirmation){
+                fd.append('password', this.theItem.password)
+                fd.append('password_confirmation', this.theItem.password_confirmation)
+            }
+
             if(typeof(this.theItem.img) == "object"){
               fd.append('img', this.theItem.img)
             }
